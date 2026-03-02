@@ -1,0 +1,5 @@
+export enum ErrorCode {
+  // Generic
+  INTERNAL_ERROR = 'INTERNAL_ERROR',
+  VALIDATION_ERROR = 'VALIDATION_ERROR'
+};
