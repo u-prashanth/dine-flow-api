@@ -4,7 +4,6 @@ import { Observable, tap } from "rxjs";
 import { Request, Response } from "express";
 import { RequestContextService } from "../context/request-context.service";
 import { MetricsService } from "../metrics/metrics.service";
-import { MetricName } from "../metrics/metrics.enum";
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
@@ -18,53 +17,56 @@ export class LoggingInterceptor implements NestInterceptor {
     const http = context.switchToHttp();
     const request = http.getRequest<Request>();
     const response = http.getResponse<Response>();
-    const requestId = this.requestContext.requestId;
+    const traceId = this.requestContext.traceId;
 
     const { method, originalUrl } = request;
-    const start = process.hrtime.bigint();
 
     return next.handle().pipe(
       tap({
         next: () => {
-          const duration = Number(process.hrtime.bigint() - start) / 1_000_000;
+          const spanInfo = this.requestContext.endSpan();
           const statusCode = response.statusCode;
 
           try {
             this.metrics.recordHttpRequest(statusCode);
+            this.metrics.recordHttpLatency(spanInfo.durationMs);
           } catch(metricError) {
             this.logger.error('Metrics increment failed', {
-              requestId,
+              traceId,
               metricError
             });
           }
 
           this.logger.info('HTTP Request Completed', {
-            requestId,
-            method,
-            url: originalUrl,
+            traceId,
+            spanId: spanInfo.spanId,
+            durationMs: spanInfo.durationMs,
             statusCode,
-            durationMs: duration
+            method,
+            url: originalUrl
           });
         },
-        error: (error) => {
-          const duration = Number(process.hrtime.bigint() - start) / 1_000_000;
+        error: () => {
+          const spanInfo = this.requestContext.endSpan();
           const statusCode = response.statusCode;
 
           try {
-            this.metrics.recordHttpFailure(statusCode);
+            this.metrics.recordHttpRequest(statusCode);
+            this.metrics.recordHttpLatency(spanInfo.durationMs);
           } catch(metricError) {
             this.logger.error('Metrics increment failed', {
-              requestId,
+              traceId,
               metricError
             });
           }
 
           this.logger.warn('HTTP Request Failed', {
-            requestId,
-            method,
-            url: originalUrl,
+            traceId,
+            spanId: spanInfo.spanId,
+            durationMs: spanInfo.durationMs,
             statusCode,
-            durationMs: duration
+            method,
+            url: originalUrl
           });
         }
       })
