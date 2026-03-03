@@ -9,8 +9,10 @@ import { GlobalExceptionFilter } from './common/filters/global-exception.filter'
 import { ContextModule } from './common/context/context.module';
 import { MetricsService } from './common/metrics/metrics.service';
 import { TracingHelper } from './common/tracing/tracing.helper';
-import { HealthModule } from './modules/health/health.module';
+import { HealthModule } from './interfaces/http/health/health.module';
 import { MetricsModule } from './common/metrics/metrics.module';
+import { DrizzleModule } from './infrastructure/database/drizzle.module';
+import { RedisModule } from './infrastructure/redis/redis.module';
 
 @Module({
   imports: [
@@ -18,7 +20,9 @@ import { MetricsModule } from './common/metrics/metrics.module';
     ContextModule,
     LoggerModule,
     MetricsModule,
-    HealthModule
+    DrizzleModule,
+    RedisModule,
+    HealthModule,
   ],
   controllers: [],
   providers: [
