@@ -7,6 +7,7 @@ import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { SuccessResponseInterceptor } from './common/interceptors/success-response.interceptor';
 import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
 import { ContextModule } from './common/context/context.module';
+import { MetricsService } from './common/metrics/metrics.service';
 
 @Module({
   imports: [
@@ -26,8 +27,9 @@ import { ContextModule } from './common/context/context.module';
     },
     {
       provide: APP_FILTER,
-      useClass: GlobalExceptionFilter
-    }
+      useClass: GlobalExceptionFilter,
+    },
+    MetricsService
   ],
 })
 export class AppModule implements NestModule {
