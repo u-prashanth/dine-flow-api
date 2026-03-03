@@ -9,7 +9,7 @@ export class LoggerService {
   info(message: string, meta?: Record<string, unknown>) {
     logger.info(
       {
-        requestId: this.context.requestId,
+        traceId: this.context.traceId,
         userId: this.context.userId,
         ...meta
       },
@@ -20,7 +20,7 @@ export class LoggerService {
   error(message: string, meta?: Record<string, unknown>) {
     logger.error(
       {
-        requestId: this.context.requestId,
+        traceId: this.context.traceId,
         userId: this.context.userId,
         ...meta
       },
@@ -39,7 +39,7 @@ export class LoggerService {
   request(message: string, req: Request, meta?: Record<string, unknown>) {
     logger.info(
       {
-        request: req['requestId'],
+        request: req['traceId'],
         ...meta
       },
       message

@@ -9,12 +9,16 @@ import { GlobalExceptionFilter } from './common/filters/global-exception.filter'
 import { ContextModule } from './common/context/context.module';
 import { MetricsService } from './common/metrics/metrics.service';
 import { TracingHelper } from './common/tracing/tracing.helper';
+import { HealthModule } from './modules/health/health.module';
+import { MetricsModule } from './common/metrics/metrics.module';
 
 @Module({
   imports: [
     AppConfigModule,
     ContextModule,
-    LoggerModule
+    LoggerModule,
+    MetricsModule,
+    HealthModule
   ],
   controllers: [],
   providers: [
@@ -29,8 +33,7 @@ import { TracingHelper } from './common/tracing/tracing.helper';
     {
       provide: APP_FILTER,
       useClass: GlobalExceptionFilter,
-    },
-    MetricsService
+    }
   ],
 })
 export class AppModule implements NestModule {
