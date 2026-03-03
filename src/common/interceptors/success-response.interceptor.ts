@@ -1,7 +1,6 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from "@nestjs/common";
 import { map, Observable } from "rxjs";
 import { RequestContextService } from "../context/request-context.service";
-import { success } from "zod";
 
 @Injectable()
 export class SuccessResponseInterceptor implements NestInterceptor {
@@ -14,7 +13,7 @@ export class SuccessResponseInterceptor implements NestInterceptor {
         data,
         error: null,
         meta: {
-          requestId: this.requestContext.requestId,
+          traceId: this.requestContext.traceId,
           timestamp: new Date().toISOString()
         }
       }))

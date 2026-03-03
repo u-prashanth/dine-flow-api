@@ -12,7 +12,6 @@ import { ErrorCode } from "../errors/error-code.enum";
 import { BaseException } from "../errors/base.exception";
 import { AppConfigService } from "src/config/config.service";
 import { MetricsService } from "../metrics/metrics.service";
-import { MetricName } from "../metrics/metrics.enum";
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
@@ -29,7 +28,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
 
-    const requestId = this.requestContext.requestId;
+    const traceId = this.requestContext.traceId;
 
     let statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
     let errorCode = ErrorCode.INTERNAL_ERROR;
@@ -43,7 +42,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       details = exception.details ?? null;
 
       this.logger.warn('Application error', {
-        requestId,
+        traceId,
         path: request.url,
         errorCode,
         message
@@ -80,14 +79,14 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       }
 
       this.logger.warn('HTTP exception', {
-        requestId,
+        traceId,
         path: request.url,
         statusCode,
         message
       });
     } else {
       this.logger.error('Unhandled exception', {
-        requestId,
+        traceId,
         path: request.url,
         error: exception
       });
@@ -102,7 +101,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       this.metrics.recordApplicationError(errorCode, statusCode);
     } catch(metricError) {
       this.logger.error('Metrics increment failed', {
-        requestId,
+        traceId,
         metricError
       });
     }
@@ -116,7 +115,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         details
       },
       meta: {
-        requestId,
+        traceId,
         timestamp: new Date().toISOString()
       }
     });
