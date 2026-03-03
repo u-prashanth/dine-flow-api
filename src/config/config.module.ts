@@ -34,6 +34,9 @@ import { deepFreeze } from "src/common/utils/deep-freeze";
     },
     AppConfigService
   ],
-  exports: ['APP_CONFIGURATION']
+  exports: [
+    'APP_CONFIGURATION',
+    AppConfigService
+  ]
 })
 export class AppConfigModule {}
