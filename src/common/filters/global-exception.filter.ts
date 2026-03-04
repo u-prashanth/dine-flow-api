@@ -98,6 +98,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     }
 
     try {
+      this.metrics.recordHttpRequest(statusCode);
       this.metrics.recordApplicationError(errorCode, statusCode);
     } catch(metricError) {
       this.logger.error('Metrics increment failed', {

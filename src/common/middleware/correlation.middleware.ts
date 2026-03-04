@@ -13,6 +13,7 @@ export class CorrelationMiddleware implements NestMiddleware {
     res.setHeader('x-request-id', traceId);
 
     this.context.run(() => {
+      this.context.setTraceId(traceId);
       next();
     });
   }
