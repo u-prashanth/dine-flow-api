@@ -11,7 +11,9 @@ export const envSchema = z.object({
   REDIS_URL: z.string().min(1),
 
   JWT_SECRET: z.string().min(32),
-  JWT_EXPIRES_IN: z.string().default('15m'),
+  JWT_REFRESH_SECRET: z.string().min(32),
+  
+  PASSWORD_SALT_ROUNDS: z.coerce.number().default(12),
 
   MESSAGING_PROVIDER: z.enum(['mock', 'whatsapp', 'sms']),
 });

@@ -29,11 +29,25 @@ export class LoggerService {
   }
 
   warn(message: string, meta?: Record<string, unknown>) {
-    logger.warn(meta || {}, message);
+    logger.warn(
+      {
+        traceId: this.context.traceId,
+        userId: this.context.userId,
+        ...meta
+      },
+      message
+    );
   }
 
   debug(message: string, meta?: Record<string, unknown>) {
-    logger.debug(meta || {}, message);
+    logger.debug(
+      {
+        traceId: this.context.traceId,
+        userId: this.context.userId,
+        ...meta
+      },
+      message
+    );
   }
 
   request(message: string, req: Request, meta?: Record<string, unknown>) {

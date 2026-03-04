@@ -7,12 +7,12 @@ import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { SuccessResponseInterceptor } from './common/interceptors/success-response.interceptor';
 import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
 import { ContextModule } from './common/context/context.module';
-import { MetricsService } from './common/metrics/metrics.service';
 import { TracingHelper } from './common/tracing/tracing.helper';
 import { HealthModule } from './interfaces/http/health/health.module';
 import { MetricsModule } from './common/metrics/metrics.module';
 import { DrizzleModule } from './infrastructure/database/drizzle.module';
 import { RedisModule } from './infrastructure/redis/redis.module';
+import { AdminAuthModule } from './interfaces/http/admin-auth/admin-auth.module';
 
 @Module({
   imports: [
@@ -23,6 +23,7 @@ import { RedisModule } from './infrastructure/redis/redis.module';
     DrizzleModule,
     RedisModule,
     HealthModule,
+    AdminAuthModule
   ],
   controllers: [],
   providers: [

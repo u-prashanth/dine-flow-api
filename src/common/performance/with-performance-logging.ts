@@ -16,7 +16,7 @@ export async function withPerformanceLogging<T>(
     logger.debug('Span completed', {
       traceId: context.traceId,
       spanId: spanInfo.spanId,
-      parentSpanId: context.parentSpanId,
+      parentSpanId: spanInfo.parentSpanId,
       name: spanInfo.name,
       durationMs: spanInfo.durationMs
     });
@@ -28,7 +28,7 @@ export async function withPerformanceLogging<T>(
     logger.warn('Span failed', {
       traceId: context.traceId,
       spanId: spanInfo.spanId,
-      parentSpanId: context.parentSpanId,
+      parentSpanId: spanInfo.parentSpanId,
       name: spanInfo.name,
       durationMs: spanInfo.durationMs
     });

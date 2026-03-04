@@ -27,4 +27,8 @@ export class AppConfigService {
   get messaging() {
     return this.config.messaging;
   }
+
+  get password() {
+    return this.config.password;
+  }
 }

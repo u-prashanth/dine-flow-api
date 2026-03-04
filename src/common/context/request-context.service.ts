@@ -11,6 +11,7 @@ interface Span {
 interface SpanInfo {
   durationMs: number;
   spanId: string;
+  parentSpanId: string | undefined;
   name: string;
 }
 
@@ -80,9 +81,14 @@ export class RequestContextService {
     const span = store.spanStack.pop()!;
     const durationMs = Number(process.hrtime.bigint() - span.startTime) / 1_000_000;
 
+    const parentSpanId = store.spanStack.length > 0
+      ? store.spanStack[store.spanStack.length - 1].spanId
+      : undefined;
+
     return {
       durationMs,
       spanId: span.spanId,
+      parentSpanId,
       name: span.name!
     };
   }
@@ -93,6 +99,10 @@ export class RequestContextService {
 
   setUserId(userId: string) {
     this.getStore().userId = userId;
+  }
+
+  setTraceId(traceId: string) {
+    this.getStore().traceId = traceId;
   }
 
   private getStore(): RequestStore {

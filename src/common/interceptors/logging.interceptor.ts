@@ -48,10 +48,8 @@ export class LoggingInterceptor implements NestInterceptor {
         },
         error: () => {
           const spanInfo = this.requestContext.endSpan();
-          const statusCode = response.statusCode;
 
           try {
-            this.metrics.recordHttpRequest(statusCode);
             this.metrics.recordHttpLatency(spanInfo.durationMs);
           } catch(metricError) {
             this.logger.error('Metrics increment failed', {
@@ -64,7 +62,6 @@ export class LoggingInterceptor implements NestInterceptor {
             traceId,
             spanId: spanInfo.spanId,
             durationMs: spanInfo.durationMs,
-            statusCode,
             method,
             url: originalUrl
           });

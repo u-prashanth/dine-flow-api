@@ -20,7 +20,7 @@ export function Trace(spanName?: string): MethodDecorator {
         logger.debug('Span completed', {
           traceId: context.traceId,
           spanId: spanInfo.spanId,
-          parentSpanId: context.parentSpanId,
+          parentSpanId: spanInfo.parentSpanId,
           name: spanInfo.name,
           durationMs: spanInfo.durationMs
         });
@@ -32,7 +32,7 @@ export function Trace(spanName?: string): MethodDecorator {
         logger.warn('Span failed', {
           traceId: context.traceId,
           spanId: spanInfo.spanId,
-          parentSpanId: context.parentSpanId,
+          parentSpanId: spanInfo.parentSpanId,
           name: spanInfo.name,
           durationMs: spanInfo.durationMs
         });

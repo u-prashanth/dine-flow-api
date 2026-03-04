@@ -1,4 +1,5 @@
 import helmet from 'helmet';
+import cookieParser from "cookie-parser";
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
@@ -21,6 +22,8 @@ async function bootstrap() {
     origin: '*',
     credentials: true
   });
+
+  app.use(cookieParser());
 
   // Disable Express Signature
   app.getHttpAdapter().getInstance().disable('x-powered-by');
